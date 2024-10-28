@@ -25,14 +25,22 @@ class DQNAgent:
     def remember(self, state, action, reward, next_state, done):
         self.memory.append((state, action, reward, next_state, done))
 
-    def act(self, state):
+    def act(self, state, return_q_values=False):
         if np.random.rand() <= self.epsilon:
-            return random.randrange(self.action_size)
-        state = torch.from_numpy(state).float().unsqueeze(0).to(device)
-        with torch.no_grad():
-            act_values = self.model(state)
-        return torch.argmax(act_values[0]).item()  # Returns action
+            action = random.randrange(self.action_size)
+            q_values = np.zeros(self.action_size)
+        else:
+            state_tensor = torch.from_numpy(state).float().unsqueeze(0).to(device)
+            with torch.no_grad():
+                q_values_tensor = self.model(state_tensor)
+            q_values = q_values_tensor.cpu().numpy()[0]
+            action = np.argmax(q_values)
 
+        if return_q_values:
+            return action, q_values
+        else:
+            return action
+        
     def replay(self, batch_size):
         minibatch = random.sample(self.memory, batch_size)
         states = np.vstack([sample[0] for sample in minibatch])

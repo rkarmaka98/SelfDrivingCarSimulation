@@ -23,8 +23,12 @@ def run_simulation():
                 pygame.quit()
                 sys.exit()
 
-        env.render()
-        action = agent.act(state)
+        # Get action and Q-values
+        action, q_values = agent.act(state, return_q_values=True)
+        
+        # Render the environment with decision info
+        env.render(action=action, q_values=q_values)
+
         next_state, reward, done = env.step(action)
         state = next_state
 

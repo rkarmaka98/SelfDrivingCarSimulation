@@ -9,7 +9,7 @@ class Obstacle:
         self.y = -100  # Start off-screen
         self.width = 50
         self.height = 100
-        self.speed = 7  # Movement speed
+        self.speed = 3  # Movement speed
 
     def move(self):
         self.y += self.speed

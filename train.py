@@ -7,7 +7,7 @@ from config import CLOCK
 import numpy as np
 import torch
 
-def train_agent(episodes=1000):
+def train_agent(episodes=500):
     env = GameEnv()
     state_size = len(env.get_state())
     action_size = 3  # Left, Stay, Right
@@ -43,6 +43,7 @@ def train_agent(episodes=1000):
 
             # Limit the frame rate
             CLOCK.tick(60)
+            
 
         # Save the model every 50 episodes
         if e % 50 == 0:
